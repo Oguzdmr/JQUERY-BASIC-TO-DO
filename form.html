@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>JQuery Dersleri</title>
+        <!--<script src="jquery-3.5.1.min.js"></script>-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+      </body>
+        <script>
+            $(function(){
+
+                var firstname;
+                var lastname ;
+                var username ;
+                var number=1;
+                var array=new Array();
+                var closestTr;
+                var resultTh;
+
+                $.Methods={
+                  add :function(){
+
+                    var firstname = $("#inlineFormInputName").val();
+                    var lastname = $("#inlineFormInputName2").val();
+                    var username = $("#inlineFormInputGroupUsername").val();
+                    
+                    
+                    firstname=firstname.trim();
+                    lastname=lastname.trim();
+                    username=username.trim();
+
+                    var person={
+                      firstname:firstname,
+                      lastname:lastname,
+                      username:username,
+                      number:number,
+                    };
+                    
+                    $(".body tr").remove();
+
+                    if(firstname==="" || lastname==="" || username===""){
+                         alert("Bütün verileri tam girdiğinizden emin olun.")
+                         for(var i=0;i<array.length;i++){
+                            $(".body").append('<tr ><th scope="row" >'+array[i].number+'</th><td>'+array[i].firstname+'</td><td>'+array[i].lastname+'</td><td>'+array[i].username+'</td><td><button type="button" class="btn btn-danger" id="xx'+number+'">Delete</button></td><td><button type="button" id="#update" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Update</button></td></tr>');
+                          };
+                      }
+                      else {
+                        array.push(person);
+                        for(var i=0;i<array.length;i++){
+                          $(".body").append('<tr ><th scope="row" >'+array[i].number+'</th><td>'+array[i].firstname+'</td><td>'+array[i].lastname+'</td><td>'+array[i].username+'</td><td><button type="button" class="btn btn-danger" id="xx'+number+'">Delete</button></td><td><button type="button" id="#update" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Update</button></td></tr>');
+                        };
+                        number++;
+                      }
+                  },
+                  update :function(){
+   
+                    firstname = $("#inlineFormInputName3").val();
+                    console.log(firstname);
+                    lastname = $("#inlineFormInputName4").val();
+                    console.log(lastname);
+                    username = $("#inlineFormInputGroupUsername2").val();
+                    console.log(username);
+                    for(var i=0;i<array.length;i++){
+                      if(array[i].number==resultTh){
+                        array[i].firstname = firstname;
+                        array[i].lastname = lastname;
+                        array[i].username = username;
+                        break;    
+                      };
+                    };
+                    $(".body tr").remove();
+                    for(var i=0;i<array.length;i++){
+                      $(".body").append('<tr ><th scope="row" >'+array[i].number+'</th><td>'+array[i].firstname+'</td><td>'+array[i].lastname+'</td><td>'+array[i].username+'</td><td><button type="button" class="btn btn-danger" id="xx'+number+'">Delete</button></td><td><button type="button" id="#update" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Update</button></td></tr>');
+                    };
+                    
+                  },
+                };
+                
+                $("#inlineFormInputName").focus();
+
+                $("#submit").on("click",function(){
+                  $.Methods.add();
+                  
+                });
+
+                $(document).on('click','#save',function(){
+                  $.Methods.update();
+                });
+
+                $(document).on('click','button.btn-primary',function(){
+                  closestTr = $(this).closest('tr');
+                  resultTh = $("th",closestTr).text();
+                 
+                });
+                $(document).on('click', 'button.btn-danger', function () {
+                  var closestTr = $(this).closest('tr');
+                  var resultTh = $("th",closestTr).text();
+                  for(var i=0;i<array.length;i++){
+                    if(array[i].number==resultTh){
+                      array.splice(i,1);    
+                    };
+                  };
+                  $(closestTr).remove();
+                });
+
+                $(document).on('mouseover', '.body tr', function () {
+                  $(this).attr('bgcolor','green');
+                });
+
+                $(document).on('mouseleave', '.body tr', function () {
+                  $(this).attr('bgcolor','');
+                });
+       
+            });
+
+                
+                
+        </script>
+        <style type="text/css">
+          
+        </style>
+    </head>
+    <body>
+
+        <form>
+            <div class="form-row align-items-center">
+                <div class="col-sm-3 my-1">
+                    <label class="sr-only" for="inlineFormInputName">Name</label>
+                    <input type="text" class="form-control" id="inlineFormInputName" placeholder="First Name" >
+                </div>
+
+              <div class="col-sm-3 my-1">
+                <label class="sr-only" for="inlineFormInputName">Name</label>
+                <input type="text" class="form-control" id="inlineFormInputName2" placeholder="Last Name">
+              </div>
+
+              <div class="col-sm-3 my-1">
+                <label class="sr-only" for="inlineFormInputGroupUsername">Username</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">@</div>
+                  </div>
+                  <input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Username">
+                </div>
+              </div>
+              
+              <div class="col-auto my-1">
+                <button type="button" class="btn btn-success" id="submit">Add</button>
+              </div>
+            </div>
+          </form>
+
+        <table class="table table-dark">
+            <thead>
+              <tr  >
+                <th scope="col" >#</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Username</th>
+                
+              </tr>
+            </thead>
+            <tbody class="body">
+              
+            </tbody>
+          </table>
+        
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="form-row align-items-center">
+                    <div class="col-sm-3 my-1">
+                        <label class="sr-only" for="inlineFormInputName3">Name</label>
+                        <input type="text" class="form-control" id="inlineFormInputName3" placeholder="First Name" >
+                    </div>
+    
+                  <div class="col-sm-3 my-1">
+                    <label class="sr-only" for="inlineFormInputName">Name</label>
+                    <input type="text" class="form-control" id="inlineFormInputName4" placeholder="Last Name">
+                  </div>
+    
+                  <div class="col-sm-3 my-1">
+                    <label class="sr-only" for="inlineFormInputGroupUsername2">Username</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <div class="input-group-text">@</div>
+                      </div>
+                      <input type="text" class="form-control" id="inlineFormInputGroupUsername2" placeholder="Username">
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary" id="save" data-dismiss="modal">Save changes</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        
+    </body>
+</html>
