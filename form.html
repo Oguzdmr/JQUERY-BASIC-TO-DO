@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>JQuery Dersleri</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+    integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+  </script>
+
+  <script>
+    $(function () {
+      var firstname;
+      var lastname;
+      var username;
+      var number = 1;
+      var array = [];
+      var array_description=[];
+      var closestTr;
+      var resultTh;
+      var description = {};
+
+      $.Methods = {
+        add: function () {
+          var firstname = $("#input-firstname").val();
+          var lastname = $("#input-lastname").val();
+          var username = "@" + $("#input-username").val();
+
+          firstname = firstname.trim();
+          lastname = lastname.trim();
+          username = username.trim();
+
+          var person = {
+            firstname: firstname,
+            lastname: lastname,
+            username: username,
+            number: number,
+          };
+
+          $(".body tr").remove();
+          $("#input-username-description option").remove();
+          $("#input-username-description").append('<option selected>Choose...</option>');
+
+          if (firstname === "" || lastname === "" || username === "@") {
+            alert("Bütün verileri tam girdiğinizden emin olun.");
+
+            $.each(array,function(key,value){
+              $(".body").append('<tr ><th scope="row" >' + value.number + '</th><td>' +
+                value.firstname + '</td><td>' + value.lastname + '</td><td>' +
+                value.username + '</td><td><button type="button" id="button-delete" class="btn btn-danger" id="xx' +
+                number + '">Delete</button></td><td><button type="button" id="#button-update" ' +
+                'class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Update</button> ' +
+                '</td><td><button type="button" id="button-details" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter" >' +
+                'Details</button></td></tr>');
+              $("#input-username-description").append('<option value="' + value.number + '">' + value.username +
+                '</option>');
+            });
+          } else {
+            array.push(person);
+            $.each(array,function(key,value){
+              $(".body").append('<tr ><th scope="row" >' + value.number + '</th><td>' +
+                value.firstname + '</td><td>' + value.lastname + '</td><td>' +
+                value.username + '</td><td><button type="button" id="button-delete" class="btn btn-danger" id="xx' +
+                number + '">Delete</button></td><td><button type="button" id="#button-update" ' +
+                'class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Update</button> ' +
+                '</td><td><button type="button" id="button-details" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter" >' +
+                'Details</button></td></tr>');
+              $("#input-username-description").append('<option value="' + value.number + '">' + value.username +
+                '</option>');
+            });
+            number++;
+          }
+        },
+
+        update: function () {
+          firstname = $("#input-firstname-update").val();
+          lastname = $("#input-lastname-update").val();
+          username = "@" + $("#input-username-update").val();
+
+          firstname = firstname.trim();
+          lastname = lastname.trim();
+          username = username.trim();
+
+          if (firstname === "" || lastname === "" || username === "@") {
+            alert("Bütün verileri tam girdiğinizden emin olun.")
+          } else {
+            for (var i = 0; i < array.length; i++) {
+              if (array[i].number == resultTh) {
+                array[i].firstname = firstname;
+                array[i].lastname = lastname;
+                array[i].username = username;
+                break;
+              };
+            };
+
+            $(".body tr").remove();
+            $("#input-username-description option").remove();
+            $("#input-username-description").append('<option selected>Choose...</option>');
+
+            $.each(array,function(key,value){
+              $(".body").append('<tr ><th scope="row" >' + value.number + '</th><td>' +
+                value.firstname + '</td><td>' + value.lastname + '</td><td>' +
+                value.username + '</td><td><button type="button" id="button-delete" class="btn btn-danger" id="xx' +
+                number + '">Delete</button></td><td><button type="button" id="#button-update" ' +
+                'class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Update</button> ' +
+                '</td><td><button type="button" id="button-details" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter" >' +
+                'Details</button></td></tr>');
+              $("#input-username-description").append('<option value="' + value.number + '">' + value.username +
+                '</option>');
+            });
+          };
+        },
+
+        delete: function () {
+          /*$.each(array,function(index,value){
+            if (value.number == resultTh) {
+              array.splice(index, 1);
+            };
+          });*/
+          for (var i = 0; i < array.length; i++) {
+            if (array[i].number == resultTh) {
+              array.splice(i, 1);                         
+            };           
+          };
+
+          for (var i = 0; i < array_description.length; i++) {
+            if (array_description[i].number == resultTh) {
+              array_description.splice(i, 1);                         
+            };           
+          };
+
+          $(closestTr).remove();
+          $(".body tr").remove();
+          $(".body-2 tr").remove();
+          $("#input-username-description option").remove();
+          $("#input-username-description").append('<option selected>Choose...</option>');
+
+          $.each(array,function(key,value){
+              $(".body").append('<tr ><th scope="row" >' + value.number + '</th><td>' +
+                value.firstname + '</td><td>' + value.lastname + '</td><td>' +
+                value.username + '</td><td><button type="button" id="button-delete" class="btn btn-danger" id="xx' +
+                number + '">Delete</button></td><td><button type="button" id="#button-update" ' +
+                'class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Update</button> ' +
+                '</td><td><button type="button" id="button-details" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter" >' +
+                'Details</button></td></tr>');
+              $("#input-username-description").append('<option value="' + value.number + '">' + value.username +
+                '</option>');
+            });
+
+          $.each(array_description,function(key,value){
+            $(".body-2").append('<tr ><th scope="row" >'+value.number+'</th><td>' + value.username + '</td><td>' +
+            value.JobDescription + '</td></tr>')
+          });   
+        },
+
+        addDescription: function () {
+          var JobDescription = $("#jobdescription-id").val();
+          var username_number = $("#input-username-description").val();
+          
+          JobDescription = JobDescription.trim();
+
+          if (JobDescription === "" || username_number === "Choose...") {
+            alert("Bütün verileri tam girdiğinizden emin olun.");
+
+          } else {
+            $.each(array_description,function(key,value){
+              if(value.number == username_number){
+                username_number = 0;
+                alert("Seçtiğiniz kişiye yeni açıklama ekleyemezsiniz.");
+              }
+            });
+            $.each(array,function(key,value){
+              if(value.number == username_number){
+                description = {
+                  JobDescription: JobDescription,
+                  firstname: value.firstname,
+                  lastname: value.lastname,
+                  username: value.username,
+                  number: value.number, 
+                };
+                array_description.push(description);
+              };    
+            });
+            $(".body-2 tr").remove();
+            
+
+            $.each(array_description,function(key,value){
+              $(".body-2").append('<tr ><th scope="row" >'+value.number+'</th><td>' + value.username + '</td><td>' +
+              value.JobDescription + '</td></tr>')
+            });   
+          }
+        },
+
+      };
+
+      $("#input-firstname").focus();
+
+      $("#submit").on("click", function () {
+        $.Methods.add();
+      });
+
+      $(document).on('click', '#save', function () {
+        $.Methods.update();
+      });
+
+      $(document).on('click', 'button.btn-primary', function () {
+        closestTr = $(this).closest('tr');
+        resultTh = $("th", closestTr).text();
+      });
+
+      $(document).on('click', '#button-delete', function () {
+        closestTr = $(this).closest('tr');
+        resultTh = $("th", closestTr).text();
+        $.Methods.delete();
+      });
+
+      $(document).on('click', '#button-details', function () {
+        closestTr = $(this).closest('tr');
+        resultTh = $("th", closestTr).text();
+
+        $(".modal-body-2 p").remove();
+
+        for (var i = 0; i < array.length; i++) {
+          if (array[i].number == resultTh) {
+            $(".modal-body-2").append('<p>Firstname: ' + array[i].firstname + '</p>');
+            $(".modal-body-2").append('<p>Lastname: ' + array[i].lastname + '</p>');
+            $(".modal-body-2").append('<p>Username: ' + array[i].username + '</p>');
+            for(var j = 0; j < array_description.length; j++){
+              if(array_description[j].number == resultTh){
+                $(".modal-body-2").append('<p>Job Description: ' + array_description[j].JobDescription + '</p>');
+              };
+            };
+          };
+        };
+      });
+
+      $(document).on('click', '#submit2', function () {
+        $.Methods.addDescription();
+      });
+
+      $(document).on('mouseover', '.body tr', function () {
+        $(this).attr('bgcolor', 'green');
+      });
+
+      $(document).on('mouseleave', '.body tr', function () {
+        $(this).attr('bgcolor', '');
+      });
+
+      $(document).on('mouseover', '.body-2 tr', function () {
+        $(this).attr('bgcolor', 'green');
+      });
+
+      $(document).on('mouseleave', '.body-2 tr', function () {
+        $(this).attr('bgcolor', '');
+      });
+    });
+  </script>
+
+  <style type="text/css">
+    body {
+      margin-left: 10%;
+      margin-right: 10%;
+    }
+    #firstForm {
+      margin: 5%;
+    }
+    .scrollable-first-table{
+      height: 300px;
+      overflow: scroll;
+    }
+    .scrollable-second-table{
+      height: 300px;
+      overflow: scroll;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div>
+    <form>
+      <div id="firstForm" class="form-row align-items-center">
+        <div class="col-sm-3 my-1">
+          <label class="sr-only" for="inlineFormInputName">Name</label>
+          <input type="text" class="form-control" id="input-firstname" placeholder="First Name">
+        </div>
+
+        <div class="col-sm-3 my-1">
+          <label class="sr-only" for="inlineFormInputName">Name</label>
+          <input type="text" class="form-control" id="input-lastname" placeholder="Last Name">
+        </div>
+
+        <div class="col-sm-3 my-1">
+          <label class="sr-only" for="inlineFormInputGroupUsername">Username</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">@</div>
+            </div>
+            <input type="text" class="form-control" id="input-username" placeholder="Username">
+          </div>
+        </div>
+
+        <div class="col-auto my-1">
+          <button type="button" class="btn btn-success" id="submit">Add</button>
+        </div>
+      </div>
+    </form>
+    <div class="scrollable-first-table">
+      <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Username</th>
+          </tr>
+        </thead>
+  
+        <tbody class="body">
+        </tbody>
+  
+      </table>
+    </div>
+    
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div class="form-row align-items-center">
+              <div class="col-sm-3 my-1">
+                <label class="sr-only" for="inlineFormInputName3">Name</label>
+                <input type="text" class="form-control" id="input-firstname-update" placeholder="First Name">
+              </div>
+
+              <div class="col-sm-3 my-1">
+                <label class="sr-only" for="inlineFormInputName">Name</label>
+                <input type="text" class="form-control" id="input-lastname-update" placeholder="Last Name">
+              </div>
+
+              <div class="col-sm-3 my-1">
+                <label class="sr-only" for="inlineFormInputGroupUsername2">Username</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">@</div>
+                  </div>
+                  <input type="text" class="form-control" id="input-username-update" placeholder="Username">
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="save">Save changes</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+          <div class="modal-content">
+            <div class="modal-header" id="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body-2" id="second-modal">
+
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <form>
+        <div class="form-row align-items-center">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default">Job Description</span>
+            </div>
+            <input type="text" class="form-control" id="jobdescription-id" aria-label="Default"
+              aria-describedby="inputGroup-sizing-default">
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="inputGroupSelect01">Username</label>
+            </div>
+            <select class="custom-select" id="input-username-description">
+              <option selected>Choose...</option>
+            </select>
+          </div>
+
+          <div class="col-auto my-1">
+            <button type="button" class="btn btn-success" id="submit2">Add</button>
+          </div>
+        </div>
+      </form>
+      <div class="scrollable-second-table">
+        <table class="table table-dark">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Username</th>
+              <th scope="col">Job Description</th>
+            </tr>
+          </thead>
+          <tbody class="body-2">
+  
+          </tbody>
+        </table>
+      </div>
+      
+    </div>
+</body>
+
+</html>
